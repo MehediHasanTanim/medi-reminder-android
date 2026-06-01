@@ -1,8 +1,6 @@
 package com.example.medireminder.core.di
 
 import android.content.Context
-import com.example.medireminder.core.database.AppDatabase
-import com.example.medireminder.core.database.FamilyMemberDao
 import com.example.medireminder.core.datastore.DataStoreManager
 import dagger.Module
 import dagger.Provides
@@ -14,17 +12,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): AppDatabase {
-        return AppDatabase.getDatabase(context)
-    }
-
-    @Provides
-    fun provideFamilyMemberDao(database: AppDatabase): FamilyMemberDao {
-        return database.familyMemberDao()
-    }
 
     @Provides
     @Singleton

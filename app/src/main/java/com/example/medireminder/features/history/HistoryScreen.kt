@@ -1,15 +1,9 @@
 package com.example.medireminder.features.history
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.example.medireminder.features.history.presentation.screen.ReminderHistoryScreen
 
 @Composable
-fun HistoryScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Reminder History Screen")
-    }
+fun HistoryScreen(onHistoryClick: (String) -> Unit = {}) {
+    ReminderHistoryScreen(onHistoryClick = onHistoryClick)
 }

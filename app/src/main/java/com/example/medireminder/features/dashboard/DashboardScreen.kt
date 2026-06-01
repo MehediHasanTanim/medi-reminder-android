@@ -1,15 +1,35 @@
 package com.example.medireminder.features.dashboard
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.example.medireminder.features.dashboard.presentation.screen.DashboardScreen as DashboardScreenContent
 
 @Composable
-fun DashboardScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Dashboard Screen")
-    }
+fun DashboardScreen(
+    onMemberClick: (String) -> Unit,
+    onAddMember: () -> Unit,
+    onViewAllMembers: () -> Unit,
+    onAddMedicine: () -> Unit,
+    onAddReminder: () -> Unit,
+    onViewStock: () -> Unit,
+    onViewReports: () -> Unit,
+    onReminderClick: (String) -> Unit = {},
+    onLowStockClick: () -> Unit = onViewStock,
+    onMedicineStockClick: (String) -> Unit = {},
+    onMissedClick: () -> Unit = {},
+    onMedicineDashboardClick: (String) -> Unit = {}
+) {
+    DashboardScreenContent(
+        onMemberClick = onMemberClick,
+        onAddMember = onAddMember,
+        onViewAllMembers = onViewAllMembers,
+        onAddMedicine = onAddMedicine,
+        onAddReminder = onAddReminder,
+        onViewStock = onViewStock,
+        onViewReports = onViewReports,
+        onReminderClick = onReminderClick,
+        onLowStockClick = onLowStockClick,
+        onMedicineStockClick = onMedicineStockClick,
+        onMissedClick = onMissedClick,
+        onMedicineDashboardClick = onMedicineDashboardClick
+    )
 }

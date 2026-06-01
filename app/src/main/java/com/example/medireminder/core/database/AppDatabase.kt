@@ -1,28 +1,34 @@
 package com.example.medireminder.core.database
 
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.medireminder.core.database.dao.*
+import com.example.medireminder.core.database.entities.*
 
-@Database(entities = [FamilyMemberEntity::class], version = 1, exportSchema = false)
+@Database(
+    entities = [
+        FamilyMemberEntity::class,
+        MedicineEntity::class,
+        MemberMedicineEntity::class,
+        MedicineStockEntity::class,
+        ReminderEntity::class,
+        ReminderLogEntity::class,
+        StockTransactionEntity::class
+    ],
+    version = 1,
+    exportSchema = true
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun familyMemberDao(): FamilyMemberDao
+    abstract fun medicineDao(): MedicineDao
+    abstract fun memberMedicineDao(): MemberMedicineDao
+    abstract fun medicineStockDao(): MedicineStockDao
+    abstract fun reminderDao(): ReminderDao
+    abstract fun reminderLogDao(): ReminderLogDao
+    abstract fun stockTransactionDao(): StockTransactionDao
+    abstract fun reportsDao(): ReportsDao
 
     companion object {
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
-
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "medireminder_database"
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
+        const val DATABASE_NAME = "medireminder_db"
     }
 }

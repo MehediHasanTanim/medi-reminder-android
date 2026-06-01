@@ -18,8 +18,9 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -28,47 +29,66 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.medireminder.core.navigation.AppNavHost
 import com.example.medireminder.core.navigation.Screen
+import com.example.medireminder.features.settings.domain.model.AppSettings
+import com.example.medireminder.features.settings.domain.model.AppThemeMode
+import com.example.medireminder.features.settings.domain.repository.SettingsRepository
 import com.example.medireminder.ui.theme.MediReminderTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var settingsRepository: SettingsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MediReminderTheme {
+            val settings by settingsRepository.observeSettings().collectAsState(initial = AppSettings())
+            val systemDark = isSystemInDarkTheme()
+            val darkTheme = when (settings.themeMode) {
+                AppThemeMode.SYSTEM -> systemDark
+                AppThemeMode.LIGHT -> false
+                AppThemeMode.DARK -> true
+            }
+            MediReminderTheme(darkTheme = darkTheme) {
                 val navController = rememberNavController()
                 val items = listOf(
                     NavigationItem("Dashboard", Screen.Dashboard.route, Icons.Default.Home),
-                    NavigationItem("Family", Screen.Family.route, Icons.Default.Person),
-                    NavigationItem("Medicine", Screen.Medicine.route, Icons.AutoMirrored.Filled.List),
-                    NavigationItem("Stock", Screen.Stock.route, Icons.Default.ShoppingCart),
-                    NavigationItem("History", Screen.History.route, Icons.Default.DateRange),
+                    NavigationItem("Family", Screen.FamilyMembers.route, Icons.Default.Person),
+                    NavigationItem("Medicine", Screen.Medicines.route, Icons.AutoMirrored.Filled.List),
+                    NavigationItem("Stock", Screen.StockDashboard.route, Icons.Default.ShoppingCart),
+                    NavigationItem("History", Screen.ReminderHistory.route, Icons.Default.DateRange),
                     NavigationItem("Settings", Screen.Settings.route, Icons.Default.Settings),
                 )
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry?.destination?.route
+                val showBottomBar = currentRoute != Screen.Splash.route
 
                 Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = {
-                        NavigationBar {
-                            val navBackStackEntry by navController.currentBackStackEntryAsState()
-                            val currentDestination = navBackStackEntry?.destination
-                            items.forEach { item ->
-                                NavigationBarItem(
-                                    icon = { Icon(item.icon, contentDescription = item.label) },
-                                    label = { Text(item.label) },
-                                    selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
-                                    onClick = {
-                                        navController.navigate(item.route) {
-                                            popUpTo(navController.graph.findStartDestination().id) {
-                                                saveState = true
+                        if (showBottomBar) {
+                            NavigationBar {
+                                val currentDestination = navBackStackEntry?.destination
+                                items.forEach { item ->
+                                    NavigationBarItem(
+                                        icon = { Icon(item.icon, contentDescription = item.label) },
+                                        label = { Text(item.label) },
+                                        selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
+                                        onClick = {
+                                            navController.navigate(item.route) {
+                                                popUpTo(navController.graph.findStartDestination().id) {
+                                                    saveState = true
+                                                }
+                                                launchSingleTop = true
+                                                restoreState = true
                                             }
-                                            launchSingleTop = true
-                                            restoreState = true
                                         }
-                                    }
-                                )
+                                    )
+                                }
                             }
                         }
                     }

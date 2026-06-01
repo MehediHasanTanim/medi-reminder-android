@@ -1,15 +1,19 @@
 package com.example.medireminder.features.settings
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import com.example.medireminder.features.settings.presentation.screen.SettingsScreen as SettingsScreenContent
 
 @Composable
-fun SettingsScreen() {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text = "Settings Screen")
-    }
+fun SettingsScreen(
+    onAppearanceClick: () -> Unit = {},
+    onReminderClick: () -> Unit = {},
+    onNotificationClick: () -> Unit = {},
+    onStockClick: () -> Unit = {}
+) {
+    SettingsScreenContent(
+        onAppearanceClick = onAppearanceClick,
+        onReminderClick = onReminderClick,
+        onNotificationClick = onNotificationClick,
+        onStockClick = onStockClick
+    )
 }

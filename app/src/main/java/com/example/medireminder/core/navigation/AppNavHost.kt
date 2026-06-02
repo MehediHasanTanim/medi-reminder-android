@@ -7,7 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.medireminder.features.dashboard.DashboardScreen
+import com.example.medireminder.features.dashboard.presentation.screen.DashboardScreen
 import com.example.medireminder.features.dashboard.presentation.screen.FamilyMemberDashboardScreen
 import com.example.medireminder.features.splash.presentation.SplashScreen
 import com.example.medireminder.features.dashboard.presentation.screen.MedicineDashboardScreen

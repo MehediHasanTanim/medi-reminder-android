@@ -84,6 +84,7 @@ fun FamilyMemberDetailsScreen(
     memberId: String,
     onNavigateBack: () -> Unit,
     onEditMember: (String) -> Unit,
+    onAssignMedicine: (String) -> Unit = {},
     viewModel: FamilyMemberViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -109,6 +110,7 @@ fun FamilyMemberDetailsScreen(
         onEditMember = { onEditMember(memberId) },
         onDeleteMember = { showDeleteDialog = true },
         onToggleActive = { viewModel.toggleActiveStatus(memberId, uiState.selectedMember?.isActive ?: true) },
+        onAssignMedicine = { onAssignMedicine(memberId) },
         snackbarHostState = snackbarHostState
     )
 
@@ -154,6 +156,7 @@ fun FamilyMemberDetailsContent(
     onEditMember: () -> Unit,
     onDeleteMember: () -> Unit,
     onToggleActive: () -> Unit,
+    onAssignMedicine: () -> Unit = {},
     snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
@@ -252,6 +255,23 @@ fun FamilyMemberDetailsContent(
                                 schedule = "8:00 AM (After breakfast)",
                                 status = "Active"
                             )
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Button(
+                                onClick = onAssignMedicine,
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = PrimaryGreen
+                                )
+                            ) {
+                                Icon(
+                                    Icons.Default.Medication,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Assign Medicine", fontWeight = FontWeight.SemiBold)
+                            }
                         }
                     }
 

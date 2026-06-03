@@ -135,7 +135,8 @@ fun AppNavHost(
             FamilyMemberDetailsScreen(
                 memberId = backStackEntry.arguments?.getString("memberId") ?: "",
                 onNavigateBack = { navController.popBackStack() },
-                onEditMember = { id -> navController.navigate(Screen.FamilyMemberEdit.createRoute(id)) }
+                onEditMember = { id -> navController.navigate(Screen.FamilyMemberEdit.createRoute(id)) },
+                onAssignMedicine = { navController.navigate(Screen.MemberMedicineAdd.route) }
             )
         }
 

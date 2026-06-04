@@ -1,7 +1,6 @@
 package com.example.medireminder.features.membermedicine.data.repository
 
 import com.example.medireminder.core.database.dao.MemberMedicineDao
-import com.example.medireminder.features.membermedicine.data.mapper.toDomain
 import com.example.medireminder.features.membermedicine.data.mapper.toEntity
 import com.example.medireminder.features.membermedicine.domain.model.MemberMedicine
 import com.example.medireminder.features.membermedicine.domain.repository.MemberMedicineRepository
@@ -40,8 +39,28 @@ class MemberMedicineRepositoryImpl @Inject constructor(
     }
 
     override fun observeActiveAssignments(): Flow<List<MemberMedicine>> {
-        return memberMedicineDao.observeActive().map { entities ->
-            entities.map { it.toDomain() }
+        return memberMedicineDao.observeActiveWithDetails().map { details ->
+            details.map { detail ->
+                MemberMedicine(
+                    id = detail.id,
+                    familyMemberId = detail.familyMemberId,
+                    medicineId = detail.medicineId,
+                    familyMemberName = detail.familyMemberName,
+                    medicineName = detail.medicineName,
+                    medicineUnit = detail.medicineUnit,
+                    medicineType = detail.medicineType,
+                    dosageQuantity = detail.dosageQuantity,
+                    frequencyPerDay = detail.frequencyPerDay,
+                    dailyTotalQuantity = detail.dailyTotalQuantity,
+                    instructions = detail.instructions,
+                    startDate = detail.startDate,
+                    endDate = detail.endDate,
+                    isActive = detail.isActive,
+                    autoReduceStock = detail.autoReduceStock,
+                    createdAt = detail.createdAt,
+                    updatedAt = detail.updatedAt
+                )
+            }
         }
     }
 

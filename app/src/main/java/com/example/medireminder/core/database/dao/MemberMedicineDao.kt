@@ -48,6 +48,16 @@ interface MemberMedicineDao {
         FROM member_medicines mm
         JOIN family_members fm ON mm.familyMemberId = fm.id
         JOIN medicines m ON mm.medicineId = m.id
+        WHERE mm.isActive = 1
+    """)
+    fun observeActiveWithDetails(): Flow<List<MemberMedicineWithDetails>>
+
+    @Transaction
+    @Query("""
+        SELECT mm.*, fm.fullName as familyMemberName, m.name as medicineName, m.unit as medicineUnit, m.medicineType as medicineType
+        FROM member_medicines mm
+        JOIN family_members fm ON mm.familyMemberId = fm.id
+        JOIN medicines m ON mm.medicineId = m.id
         WHERE mm.familyMemberId = :familyMemberId
     """)
     fun observeMemberMedicineWithDetailsByMember(familyMemberId: String): Flow<List<MemberMedicineWithDetails>>
